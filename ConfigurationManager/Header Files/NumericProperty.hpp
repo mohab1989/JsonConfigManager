@@ -12,7 +12,7 @@ struct Maximum {
   bool maximumExclusive = false;
 };
 
-class NumericProperty : public IConfigurableProperty<double> {
+class NumericProperty : public IConfigurableProperty {
  private:
   Minimum m_minimum;
   Maximum m_maximum;
@@ -21,7 +21,7 @@ class NumericProperty : public IConfigurableProperty<double> {
   NumericProperty(const std::string& name, const Minimum& minimum = Minimum(),
                   const Maximum& maximum = Maximum());
 
-  auto setValue(const double&) -> bool override;
-  virtual auto getValue() -> double override;
+  auto setValue(const std::any&)->bool override;
+  auto getValue() const -> std::any override;
 };
 }  // namespace ConfigurationManager

@@ -8,27 +8,29 @@ namespace ConfigurationManager {
       this->m_maximum = maximum;
     }
 
-    auto NumericProperty::setValue(const double& value) -> bool {
-
+    auto NumericProperty::setValue(const std::any& value) -> bool {
+      auto value_double = std::any_cast<double>(value);
       // Check lower limit
-      if (value < this->m_minimum.value) {
+      if (value_double < this->m_minimum.value) {
         return false;
       }
-      if (this->m_minimum.minimumExclusive && value == this->m_minimum.value) {
+      if (this->m_minimum.minimumExclusive &&
+          value_double == this->m_minimum.value) {
           return false;
       }
 
       // Check upper limit
-      if (value > this->m_maximum.value) {
+      if (value_double > this->m_maximum.value) {
         return false;
       }
-      if (this->m_maximum.maximumExclusive && value == this->m_maximum.value) {
+      if (this->m_maximum.maximumExclusive &&
+          value_double == this->m_maximum.value) {
           return false;
       }
 
-      this->m_value = value;
+      this->m_value = value_double;
       return true;
     }
 
-    auto NumericProperty::getValue() -> double { return this->m_value;}
+    auto NumericProperty::getValue() const -> std::any { return this->m_value;}
     }  // namespace ConfigurationManager

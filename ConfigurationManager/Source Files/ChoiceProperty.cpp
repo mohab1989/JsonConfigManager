@@ -9,27 +9,31 @@ ChoiceProperty::ChoiceProperty(
   this->m_accpetedNumericProperties = accpetedNumericProperties;
 }
 
-auto ChoiceProperty::setValue(const std::variant<std::string, double>& value)
+auto ChoiceProperty::setValue(const std::any& value)
     -> bool {
-  // Check if value in lists
-  if (std::holds_alternative<std::string>(value)) {
-    auto it = m_acceptedStrings.find(std::get<std::string>(value));
+  // Get the type of std::any object
+  const std::type_info& type = value.type();
+
+  if (type == typeid(std::string)) {
+    auto it = m_acceptedStrings.find(std::any_cast<std::string>(value));
     if (it == m_acceptedStrings.end()) {
       return false;
     }
-  } else if (std::holds_alternative<double>(value)) {
-    auto it = m_accpetedNumericProperties.find(std::get<double>(value));
+  } else if (type == typeid(double)) {
+    auto it = m_accpetedNumericProperties.find(std::any_cast<double>(value));
     if (it == m_accpetedNumericProperties.end()) {
       return false;
     }
-  } else {
+  }
+  else {
     return false;
   }
+
   m_value = value;
   return true;
 }
 
-auto ChoiceProperty::getValue() -> std::variant<std::string, double> {
+auto ChoiceProperty::getValue() const -> std::any {
   return m_value;
 }
 }  // namespace ConfigurationManager
