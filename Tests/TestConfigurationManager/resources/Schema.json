@@ -1,0 +1,87 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "anyOf": [
+      {
+        "properties": {
+          "VerafEye 1.0": {
+            "type": "object",
+            "properties": {
+              "Cuda": {
+                "type": "number",
+                "enum": [10, 11.3]
+              },
+              "ramGs": {
+                "type": "number",
+                "minimum": 16
+              },
+              "logging": {
+                "type": "object",
+                "properties": {
+                  "level": {
+                    "type": "string",
+                    "enum": ["off", "error", "warning", "trace"]
+                  },
+                  "flushPeriodSeconds": {
+                    "type": "number",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "level",
+                  "flushPeriodSeconds"
+                ]
+              }
+            },
+            "required": [
+              "Cuda",
+              "ramGs",
+              "logging"
+            ]
+          }
+        },
+        "required": ["VerafEye 1.0"]
+      },
+      {
+        "properties": {
+          "VerafEye 2.6": {
+            "type": "object",
+            "properties": {
+              "Cuda": {
+                "type": ["number", "string"],
+                "enum": [10, 11.3, "latest"]
+              },
+              "ramGs": {
+                "type": "number",
+                "minimum": 32
+              },
+              "logging": {
+                "type": "object",
+                "properties": {
+                  "level": {
+                    "type": "string",
+                    "enum": ["error", "warning", "trace"]
+                  },
+                  "flushPeriodSeconds": {
+                    "type": "number",
+                    "minimum": 0.1
+                  }
+                },
+                "required": [
+                  "level",
+                  "flushPeriodSeconds"
+                ]
+              }
+            },
+            "required": [
+              "Cuda",
+              "ramGs",
+              "logging"
+            ]
+          }
+        },
+        "required": ["VerafEye 2.6"]
+      }
+    ]
+}
+  

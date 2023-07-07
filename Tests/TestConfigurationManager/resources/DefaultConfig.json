@@ -1,0 +1,19 @@
+{
+    "VerafEye 1.0":{
+    "Cuda": 11.3 ,
+    "ramGs": 16,
+    "logging":{
+        "level": "trace",
+        "flushPeriodSeconds": 3
+        }
+    },
+  
+    "VerafEye 2.6":{
+    "Cuda": "latest",
+    "ramGs": 32,
+    "logging":{
+        "level": "error",
+        "flushPeriodSeconds": 5
+        }
+    }
+}
