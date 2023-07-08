@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="ChoicePropertyTest.cpp" />
+    <ClCompile Include="NumericPropertyTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -23,8 +24,5 @@
     <CopyFileToFolders Include="resources\Schema.json">
       <Filter>resources</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="ChoicePropertyTest.rc" />
   </ItemGroup>
 </Project>

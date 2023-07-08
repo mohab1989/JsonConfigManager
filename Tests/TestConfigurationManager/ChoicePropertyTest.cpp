@@ -6,14 +6,11 @@ namespace ConfigurationManager {
 
 // The fixture for ChoicePropertyTest
 class ChoicePropertyTest : public ::testing::Test {
- public:
+ protected:
   ChoiceProperty m_choiceProperty;
   IConfigurableProperty* m_property;
- protected:
-  // You can remove any or all of the following functions if their bodies would
-  // be empty.
+
   ChoicePropertyTest() {
-    // You can do set-up work for each test here.
     std::set<std::string> acceptedStrings{"trace", "error", "warning"};
     std::set<double> acceptedNumbers{0, 1, 2};
     m_choiceProperty =

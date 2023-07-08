@@ -8,7 +8,18 @@ namespace ConfigurationManager {
       this->m_maximum = maximum;
     }
 
+    auto NumericProperty::setValue(const float& value) -> bool {
+      return this->setValue(std::any(static_cast<double>(value)));
+    }
+    auto NumericProperty::setValue(const int& value) -> bool {
+      return this->setValue(std::any(static_cast<double>(value)));
+    }
+
     auto NumericProperty::setValue(const std::any& value) -> bool {
+      const std::type_info& type = value.type();
+      if (type != typeid(double)) {
+        return false;
+      }
       auto value_double = std::any_cast<double>(value);
       // Check lower limit
       if (value_double < this->m_minimum.value) {

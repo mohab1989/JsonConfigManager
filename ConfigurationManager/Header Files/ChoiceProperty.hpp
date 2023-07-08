@@ -1,8 +1,8 @@
 #pragma once
 #ifdef CONFIGURATION_MANAGER_EXPORTS
-#define CHOICE_PROPERTY __declspec(dllexport)
+#define CONFIGURATION_MANAGER __declspec(dllexport)
 #else
-#define CHOICE_PROPERTY __declspec(dllimport)
+#define CONFIGURATION_MANAGER __declspec(dllimport)
 #endif
 #include <set>
 #include <string>
@@ -16,14 +16,14 @@ namespace ConfigurationManager {
       std::set<std::string> m_acceptedStrings;
 
      public:
-      CHOICE_PROPERTY ChoiceProperty() = default;
-      CHOICE_PROPERTY ChoiceProperty(
+      CONFIGURATION_MANAGER ChoiceProperty() = default;
+      CONFIGURATION_MANAGER ChoiceProperty(
           const std::string name,
                          std::set<std::string>& acceptedStrings,
                      const std::set<double>& accpetedNumericProperties);
 
-      CHOICE_PROPERTY auto setValue(const std::any& value)
+      CONFIGURATION_MANAGER auto setValue(const std::any& value)
           -> bool override;
-      CHOICE_PROPERTY auto getValue() const -> std::any override;
+      CONFIGURATION_MANAGER auto getValue() const -> std::any override;
     };
 }  // namespace ConfigurationManager
