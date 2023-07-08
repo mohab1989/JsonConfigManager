@@ -3,7 +3,7 @@
 namespace ConfigurationManager {
     NumericProperty::NumericProperty(const std::string& name, const Minimum& minimum,
         const Maximum& maximum) {
-      this->m_name = name;
+      //this->m_name = name;
       this->m_minimum = minimum;
       this->m_maximum = maximum;
     }

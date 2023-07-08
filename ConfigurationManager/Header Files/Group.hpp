@@ -14,6 +14,6 @@ class Group {
  public:
 
   Group(const std::string& name);
-  Append(std::vector<IConfigurableProperty>);
+  //Append(std::vector<IConfigurableProperty>);
 };
 }  // namespace ConfigurationManager
