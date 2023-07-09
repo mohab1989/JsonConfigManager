@@ -8,24 +8,28 @@ namespace ConfigurationManager {
 // The fixture for GroupTest
 class GroupTest : public ::testing::Test {
  public:
-  NumericProperty m_numbericProperty;
-  ChoiceProperty m_choiceProperty;
-  std::vector<IConfigurableProperty*> m_properties =
-      std::vector<IConfigurableProperty*>();
+  std::vector<std::unique_ptr<IConfigurableProperty>> m_properties =
+      std::vector<std::unique_ptr<IConfigurableProperty>>();
   Group m_group;
 
  protected:
   GroupTest() {
-    m_numbericProperty = NumericProperty("flush");
-    m_numbericProperty.setValue((double)10);
+    // prepare numeric property
+    auto numbericProperty =
+        std::make_unique<NumericProperty>("flush");
+    numbericProperty->setValue((double)10);
+
+    // prpare choice property
     std::set<std::string> acceptedStrings{"trace", "error", "warning"};
     std::set<double> acceptedNumbers{0, 1, 2};
-    m_choiceProperty =
-        ChoiceProperty("level", acceptedStrings, acceptedNumbers);
-    m_choiceProperty.setValue(std::string("warning"));
-    m_properties.push_back(&m_numbericProperty);
-    m_properties.push_back(&m_choiceProperty);
-    m_group = Group("logging", m_properties);
+    auto choiceProperty =
+        std::make_unique <ChoiceProperty>("level", acceptedStrings, acceptedNumbers);
+    choiceProperty->setValue(std::string("warning"));
+
+    // prepare list of properties
+    m_properties.push_back(std::move(numbericProperty));
+    m_properties.push_back(std::move(choiceProperty));
+    m_group = Group("logging", std::move(m_properties));
   }
   ~GroupTest() override {}
 };
