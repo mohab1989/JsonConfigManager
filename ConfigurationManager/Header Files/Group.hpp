@@ -22,8 +22,7 @@ class Group {
       std::vector<std::shared_ptr<Group>>();
 
  public:
-   Group() = default;
-  //Group(const Group&) = delete;
+  Group() = default;
   CONFIGURATION_MANAGER Group(
       const std::string& name,
       std::vector<std::unique_ptr<IConfigurableProperty>>&& properties,
@@ -38,8 +37,11 @@ class Group {
   CONFIGURATION_MANAGER auto getSubgroup(std::string name) -> std::shared_ptr<Group>;
   CONFIGURATION_MANAGER auto setPropertyValue(std::string name, std::any value)
       -> bool;
-  // auto appendProperty(IConfigurableProperty property);
-  // auto appendSubgroup(Group group) -> bool;
-  // auto removeSubgroup(Group group) -> bool;
+  CONFIGURATION_MANAGER auto appendProperty(
+      std::unique_ptr<IConfigurableProperty>&& property)
+      -> bool;
+  CONFIGURATION_MANAGER auto appendSubgroup(std::unique_ptr<Group>&& group)
+      ->bool;
+  CONFIGURATION_MANAGER auto removeSubgroup(const std::string& name)->bool;
 };
 }  // namespace ConfigurationManager

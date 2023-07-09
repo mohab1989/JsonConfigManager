@@ -13,7 +13,8 @@ class GroupTest : public ::testing::Test {
   Group m_group;
 
  protected:
-  GroupTest() {
+
+void SetUp() override {
     // prepare numeric property
     auto numbericProperty =
         std::make_unique<NumericProperty>("flush");
@@ -50,6 +51,42 @@ TEST_F(GroupTest, setPropertyValue) {
    EXPECT_TRUE(m_group.setPropertyValue("level", (double)2));
    auto choiceProperty = m_group.getPropertyValue("level");
    EXPECT_EQ((double)2, std::any_cast<double>(choiceProperty));
+}
+
+TEST_F(GroupTest, appendProperty) {
+   EXPECT_TRUE(m_group.appendProperty(std::make_unique<NumericProperty>("appnededProperty")));
+   EXPECT_TRUE(m_group.setPropertyValue("appnededProperty", (double)20));
+   auto numericProperty = m_group.getPropertyValue("appnededProperty");
+   EXPECT_EQ((double)20, std::any_cast<double>(numericProperty));
+   EXPECT_FALSE(m_group.appendProperty(std::make_unique<NumericProperty>("appnededProperty")));
+   numericProperty = m_group.getPropertyValue("appnededProperty");
+   EXPECT_EQ((double)20, std::any_cast<double>(numericProperty));
+}
+
+TEST_F(GroupTest, appendSubGroup) {
+   auto subPropetiers = std::vector<std::unique_ptr<IConfigurableProperty>>();
+   subPropetiers.push_back(
+       std::make_unique<NumericProperty>("newNumericValue"));
+   EXPECT_TRUE(m_group.appendSubgroup(std::make_unique<Group>("appnededGroup1",std::move(subPropetiers))));
+   //access subgroup
+   auto addedGroup = m_group.getSubgroup("appnededGroup1");
+   EXPECT_TRUE(addedGroup->setPropertyValue("newNumericValue", (double)20));
+   auto numericProperty = addedGroup->getPropertyValue("newNumericValue");
+   EXPECT_EQ((double)20, std::any_cast<double>(numericProperty));
+   EXPECT_FALSE(m_group.appendSubgroup(std::make_unique<Group>(
+       "appnededGroup1",
+       std::move(std::vector<std::unique_ptr<IConfigurableProperty>>()))));
+   // Previous step didnt succeed, get old value of flush;
+   numericProperty = addedGroup->getPropertyValue("newNumericValue");
+   EXPECT_EQ((double)20, std::any_cast<double>(numericProperty));
+}
+
+TEST_F(GroupTest, removeSubGroup) {
+   EXPECT_TRUE(m_group.appendSubgroup(
+       std::make_unique<Group>("appnededGroup2", std::move(m_properties))));
+   EXPECT_TRUE(m_group.removeSubgroup("appnededGroup2"));
+   // nothing to delete
+   EXPECT_FALSE(m_group.removeSubgroup("appnededGroup2"));
 }
 
 }  // namespace ConfigurationManager
