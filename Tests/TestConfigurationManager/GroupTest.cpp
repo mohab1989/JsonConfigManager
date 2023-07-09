@@ -42,4 +42,14 @@ TEST_F(GroupTest, getPropertyValue) {
              std::any_cast<std::string>(choiceProperty));
 }
 
+TEST_F(GroupTest, setPropertyValue) {
+   EXPECT_TRUE(m_group.setPropertyValue("flush",(double)100));
+   auto numericProperty = m_group.getPropertyValue("flush");
+   EXPECT_EQ((double)100, std::any_cast<double>(numericProperty));
+
+   EXPECT_TRUE(m_group.setPropertyValue("level", (double)2));
+   auto choiceProperty = m_group.getPropertyValue("level");
+   EXPECT_EQ((double)2, std::any_cast<double>(choiceProperty));
+}
+
 }  // namespace ConfigurationManager
