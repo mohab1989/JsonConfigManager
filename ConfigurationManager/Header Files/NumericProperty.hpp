@@ -24,14 +24,12 @@ class NumericProperty : public IConfigurableProperty {
   Maximum m_maximum;
 
  public:
-  NumericProperty() = default;
+  CONFIGURATION_MANAGER NumericProperty() = default;
   CONFIGURATION_MANAGER NumericProperty(const std::string& name,
                                        const Minimum& minimum = Minimum(),
                   const Maximum& maximum = Maximum());
 
-  CONFIGURATION_MANAGER auto setValue(const float& value) -> bool;
-  CONFIGURATION_MANAGER auto setValue(const int& value) -> bool;
-  CONFIGURATION_MANAGER auto getValue() const->std::any override;
+  CONFIGURATION_MANAGER auto getValue() const -> std::any override;
   CONFIGURATION_MANAGER auto setValue(const std::any&)->bool override;
 };
 }  // namespace ConfigurationManager

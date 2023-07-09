@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "NumericProperty.hpp"
-#include "IConfigurableProperty.hpp"
 
 namespace ConfigurationManager {
 
-// The fixture for ChoicePropertyTest
+// The fixture for NumericPropertyTest
 class NumericPropertyTest : public ::testing::Test {
  public:
   NumericProperty m_defaultNumbericProperty;
@@ -16,11 +15,7 @@ class NumericPropertyTest : public ::testing::Test {
   Maximum m_max_exlusiveMin_10{10, true};
 
  protected:
-  // You can remove any or all of the following functions if their bodies would
-  // be empty.
   NumericPropertyTest() {
-
-    std::set<double> acceptedNumbers{0, 1, 2};
     m_defaultNumbericProperty =
         NumericProperty("flush");
     m_property = &m_defaultNumbericProperty;

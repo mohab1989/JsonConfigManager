@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Source Files\ChoiceProperty.cpp" />
     <ClCompile Include="Source Files\ConfigurationManager.cpp" />
+    <ClCompile Include="Source Files\Group.cpp" />
     <ClCompile Include="Source Files\NumericProperty.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "ChoiceProperty.hpp"
-#include "IConfigurableProperty.hpp"
 
 namespace ConfigurationManager {
 

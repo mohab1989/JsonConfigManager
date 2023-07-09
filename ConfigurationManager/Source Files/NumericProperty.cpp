@@ -3,16 +3,9 @@
 namespace ConfigurationManager {
     NumericProperty::NumericProperty(const std::string& name, const Minimum& minimum,
         const Maximum& maximum) {
-      //this->m_name = name;
-      this->m_minimum = minimum;
-      this->m_maximum = maximum;
-    }
-
-    auto NumericProperty::setValue(const float& value) -> bool {
-      return this->setValue(std::any(static_cast<double>(value)));
-    }
-    auto NumericProperty::setValue(const int& value) -> bool {
-      return this->setValue(std::any(static_cast<double>(value)));
+      m_name = name;
+      m_minimum = minimum;
+      m_maximum = maximum;
     }
 
     auto NumericProperty::setValue(const std::any& value) -> bool {
@@ -25,7 +18,7 @@ namespace ConfigurationManager {
       if (value_double < this->m_minimum.value) {
         return false;
       }
-      if (this->m_minimum.minimumExclusive &&
+      if (m_minimum.minimumExclusive &&
           value_double == this->m_minimum.value) {
           return false;
       }
