@@ -1,40 +1,41 @@
 #pragma once
+#ifdef CONFIGURATION_MANAGER_EXPORTS
+#define CONFIGURATION_MANAGER __declspec(dllexport)
+#else
+#define CONFIGURATION_MANAGER __declspec(dllimport)
+#endif
+#include <unordered_set>
 #include <filesystem>
+
 #include "nlohmann/json.hpp"
+#include "Group.hpp"
+#include "NumericProperty.hpp"
+#include "ChoiceProperty.hpp"
 
 using json = nlohmann::json;
 namespace ConfigurationManager {
 
-class IHpmConfigEditor {
+class JsonUtilites {
  public:
-  __declspec(dllexport)
-  virtual json loadJson(std::filesystem::path pathToJsonConfig) = 0;
-};
+  static CONFIGURATION_MANAGER auto loadJson(
+      std::filesystem::path pathToJsonConfig) -> json;
 
-class JsonManager : public IHpmConfigEditor
-{
- public:
-  __declspec(dllexport) auto loadJson(std::filesystem::path pathToJsonConfig)
-      -> json override;
-
-  static __declspec(dllexport) bool writeJson(
+  static CONFIGURATION_MANAGER bool writeJson(
       json data, std::filesystem::path pathToJsonConfig);
 };
 
-//=======================================================
-
-class IHpmConfigReader
-{
- public:
-  __declspec(dllexport) virtual json
-      getConfig(std::filesystem::path pathToJsonConfig) = 0;
+struct GroupHasher {
+  std::size_t operator()(const Group& e) const noexcept {
+    return std::hash<std::string>{}(e.getName());
+  }
 };
 
-
-class ConfigReader : public IHpmConfigReader
-{
+class ConfigurationManager {
+ private:
+  std::unordered_set<Group, GroupHasher, std::equal_to<Group>> m_groups =
+      std::unordered_set<Group, GroupHasher, std::equal_to<Group>>();
+  Group DeserializeGroupConstraints(const std::string groupName, const json& groupObject);
  public:
-  auto getConfig(std::filesystem::path pathToJsonConfig) -> json override;
+  CONFIGURATION_MANAGER ConfigurationManager(json constaints = {});
 };
-
-}  // namespace MathFuncs
+}  // namespace ConfigurationManager

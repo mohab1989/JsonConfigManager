@@ -144,12 +144,21 @@
     <ClInclude Include="Header Files\Group.hpp" />
     <ClInclude Include="Header Files\IConfigurableProperty.hpp" />
     <ClInclude Include="Header Files\NumericProperty.hpp" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\ChoiceProperty.cpp" />
     <ClCompile Include="Source Files\ConfigurationManager.cpp" />
     <ClCompile Include="Source Files\Group.cpp" />
     <ClCompile Include="Source Files\NumericProperty.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ConfigurationManager.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Resources\constraints.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

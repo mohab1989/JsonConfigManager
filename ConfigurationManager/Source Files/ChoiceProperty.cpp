@@ -2,7 +2,7 @@
 
 namespace ConfigurationManager {
 ChoiceProperty::ChoiceProperty(
-    const std::string name, std::set<std::string>& acceptedStrings,
+    const std::string name, const std::set<std::string>& acceptedStrings,
     const std::set<double>& accpetedNumericProperties) {
   this->m_name = name;
   this->m_acceptedStrings = acceptedStrings;

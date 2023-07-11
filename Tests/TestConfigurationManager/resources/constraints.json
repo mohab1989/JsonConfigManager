@@ -1,0 +1,51 @@
+{
+	"group_1": {
+		"numeric_properties": [{
+				"name": "propety_name_1",
+				"minimum": 0,
+				"minimumExlusive": true,
+				"maximum": 60,
+				"maximumExlusive": false
+			},
+			{
+				"name": "propety_name_2",
+				"minimum": 0,
+				"minimumExlusive": false,
+				"maximum": 1,
+				"maximumExlusive": false
+			}
+		],
+
+		"choice_properties": [{
+				"name": "propety_name_1",
+				"accepted_numeric_properties": [1, 2, 3],
+				"accepted_string_properties": ["A1", "A2", "A3"]
+			},
+			{
+				"name": "propety_name_2",
+				"accepted_numeric_properties": [1.1, 2.5, 3.6],
+				"accepted_string_properties": ["B1","B2","B3"]
+			}
+		],
+
+		"subgroups": {
+			"subgroup_1": {
+				"choice_properties": [{
+						"name": "propety_name_1",
+						"accepted_numeric_properties": [100, 200, 300],
+						"accepted_string_properties": ["C1","C2","C3"]
+					},
+					{
+						"name": "propety_name_2",
+						"accepted_numeric_properties": [-10, -200, 300],
+						"accepted_string_properties": ["D1","D2","D3"]
+					}
+				]
+			},
+			"subgroup_2": {
+			}
+		}
+	},
+	"group_2": {
+	}
+}

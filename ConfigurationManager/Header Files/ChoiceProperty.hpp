@@ -19,7 +19,7 @@ namespace ConfigurationManager {
       CONFIGURATION_MANAGER ChoiceProperty() = default;
       CONFIGURATION_MANAGER ChoiceProperty(
           const std::string name,
-                         std::set<std::string>& acceptedStrings,
+                       const std::set<std::string>& acceptedStrings,
                      const std::set<double>& accpetedNumericProperties);
 
       CONFIGURATION_MANAGER auto setValue(const std::any& value)

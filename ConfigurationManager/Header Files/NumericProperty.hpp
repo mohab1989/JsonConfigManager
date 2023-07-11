@@ -26,7 +26,7 @@ class NumericProperty : public IConfigurableProperty {
  public:
   CONFIGURATION_MANAGER NumericProperty() = default;
   CONFIGURATION_MANAGER NumericProperty(const std::string& name,
-                                       const Minimum& minimum = Minimum(),
+                  const Minimum& minimum = Minimum(),
                   const Maximum& maximum = Maximum());
 
   CONFIGURATION_MANAGER auto getValue() const -> std::any override;
