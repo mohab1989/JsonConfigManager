@@ -35,7 +35,7 @@ class Group {
   CONFIGURATION_MANAGER auto getName() const -> std::string { return m_name; };
 
   CONFIGURATION_MANAGER auto getPropertyValue(std::string name) -> std::any;
-  CONFIGURATION_MANAGER auto getSubgroup(std::string name) -> std::shared_ptr<Group>;
+  CONFIGURATION_MANAGER auto getSubgroup(std::string name)const -> std::shared_ptr<Group>;
   CONFIGURATION_MANAGER auto setPropertyValue(std::string name, std::any value)
       -> bool;
   CONFIGURATION_MANAGER auto appendProperty(

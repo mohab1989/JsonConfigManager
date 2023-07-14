@@ -19,8 +19,8 @@ auto JsonUtilites::loadJson(
   return json::parse(f);
 }
 
-Group ConfigurationManager::DeserializeGroupConstraints(
-    const std::string groupName, const json& groupObject) {
+auto ConfigurationManager::DeserializeGroupConstraints(
+    const std::string groupName, const json& groupObject) -> Group {
   // Iterate over poperties constraints
   auto properties = std::vector<std::unique_ptr<IConfigurableProperty>>();
 
@@ -53,7 +53,6 @@ Group ConfigurationManager::DeserializeGroupConstraints(
   if (groupObject.contains("subgroups")) {
       auto subGroups = groupObject.at("subgroups");
       for (auto& subGroup : subGroups.items()) {
-        std::cout << "subGroup name: " << subGroup.key() << std::endl;
         subgroups.push_back(std::make_shared<Group>(
             DeserializeGroupConstraints(subGroup.key(), subGroup.value())));
       }
@@ -69,9 +68,61 @@ Group ConfigurationManager::DeserializeGroupConstraints(
   }
 
   for (auto& group : constraints.items()) {
-    std::cout << "Object name: " << group.key() << std::endl;
     // Deserialize Groups
-    m_groups.insert(DeserializeGroupConstraints(group.key(), group.value()));
+    auto existingGroup =
+        std::find_if(m_groups.begin(), m_groups.end(),
+                     [group](const Group& g) { return g.getName() == group.key(); });
+    // If Group already exists.
+    if (existingGroup != m_groups.end()) {
+        // define requirements
+        // for the time being assume: ignore.
+        continue;
+    }
+    m_groups.push_back(DeserializeGroupConstraints(group.key(), group.value()));
   }
 }
+
+ auto ConfigurationManager::getNestedGroups(std::deque<std::string> nestingGroups) -> std::shared_ptr<Group> {
+  if (nestingGroups.empty()) {
+    return nullptr;
+  }
+  auto rootGroupIter = std::find_if(
+      m_groups.begin(), m_groups.end(), [nestingGroups](const Group& g) {
+        return g.getName() == nestingGroups.front();
+      });
+  if (rootGroupIter == m_groups.end()) {
+    return nullptr;
+  }
+  std::shared_ptr<Group> currentGroup(&(*rootGroupIter));
+  nestingGroups.pop_front();
+
+  // access subgroups
+  for (const auto& groupName : nestingGroups) {
+    auto subGroup = currentGroup->getSubgroup(groupName);
+    if (subGroup == nullptr) {
+        return nullptr;
+    }
+    currentGroup = subGroup;
+  }
+  return currentGroup;
+ }
+
+ auto ConfigurationManager::setPropertyValue(
+    std::deque<std::string> nestingGroups, const std::string& propertyName,
+    const std::any& value) -> bool {
+  auto group = getNestedGroups(nestingGroups);
+  if (group == nullptr) {
+    return false;
+  }
+  return group->setPropertyValue(propertyName, value);
+ }
+ auto ConfigurationManager::getPropertyValue(
+     const std::deque<std::string>& nestingGroups, const std::string& propertyName)
+     -> std::any {
+  auto group = getNestedGroups(nestingGroups);
+  if (group == nullptr) {
+    return false;
+  }
+  return group->getPropertyValue(propertyName);
+ }
 }  // namespace ConfigurationManager

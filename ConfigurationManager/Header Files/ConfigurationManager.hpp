@@ -4,8 +4,8 @@
 #else
 #define CONFIGURATION_MANAGER __declspec(dllimport)
 #endif
-#include <unordered_set>
 #include <filesystem>
+#include <deque>
 
 #include "nlohmann/json.hpp"
 #include "Group.hpp"
@@ -24,18 +24,20 @@ class JsonUtilites {
       json data, std::filesystem::path pathToJsonConfig);
 };
 
-struct GroupHasher {
-  std::size_t operator()(const Group& e) const noexcept {
-    return std::hash<std::string>{}(e.getName());
-  }
-};
-
 class ConfigurationManager {
  private:
-  std::unordered_set<Group, GroupHasher, std::equal_to<Group>> m_groups =
-      std::unordered_set<Group, GroupHasher, std::equal_to<Group>>();
-  Group DeserializeGroupConstraints(const std::string groupName, const json& groupObject);
+  std::vector<Group> m_groups = std::vector<Group>();
+  auto DeserializeGroupConstraints(const std::string groupName,
+                                   const json& groupObject) -> Group;
+  auto getNestedGroups(std::deque<std::string> nestingGroups) -> std::shared_ptr<Group>;
  public:
   CONFIGURATION_MANAGER ConfigurationManager(json constaints = {});
+  CONFIGURATION_MANAGER auto setPropertyValue(
+      std::deque<std::string> nestingGroups,
+      const std::string& propertyName, const std::any& value) -> bool;
+  CONFIGURATION_MANAGER auto getPropertyValue(
+      const std::deque<std::string>& nestingGroups, const std::string& propertyName)
+      -> std::any;
+
 };
 }  // namespace ConfigurationManager

@@ -17,7 +17,7 @@ auto Group::getPropertyValue(std::string name) -> std::any {
   return (*property)->getValue();
 }
 
- auto Group::getSubgroup(std::string name) -> std::shared_ptr<Group> {
+ auto Group::getSubgroup(std::string name) const -> std::shared_ptr<Group> {
    auto group = std::find_if(m_subgroups.begin(), m_subgroups.end(),
       [name](const std::shared_ptr<Group>& p) { return p->getName() == name; });
    if (group == m_subgroups.end()) {
