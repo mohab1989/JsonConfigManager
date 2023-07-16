@@ -29,7 +29,8 @@ class ConfigurationManager {
   std::vector<Group> m_groups = std::vector<Group>();
   auto DeserializeGroupConstraints(const std::string groupName,
                                    const json& groupObject) -> Group;
-  auto getNestedGroups(std::deque<std::string> nestingGroups) -> std::shared_ptr<Group>;
+  auto getNestedGroups(std::deque<std::string> nestingGroups) -> Group*;
+
  public:
   CONFIGURATION_MANAGER ConfigurationManager(json constaints = {});
   CONFIGURATION_MANAGER auto setPropertyValue(

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <optional>
 
 namespace ConfigurationManager {
 
@@ -81,7 +82,7 @@ ConfigurationManager::ConfigurationManager(json constraints) {
 }
 
 auto ConfigurationManager::getNestedGroups(
-    std::deque<std::string> nestingGroups) -> std::shared_ptr<Group> {
+    std::deque<std::string> nestingGroups) -> Group* {
   if (nestingGroups.empty()) {
     return nullptr;
   }
@@ -90,7 +91,7 @@ auto ConfigurationManager::getNestedGroups(
   if (rootGroupIter == m_groups.end()) {
     return nullptr;
   }
-  std::shared_ptr<Group> currentGroup(&(*rootGroupIter));
+  Group* currentGroup(&(*rootGroupIter));
   nestingGroups.pop_front();
 
   // access subgroups
@@ -99,7 +100,7 @@ auto ConfigurationManager::getNestedGroups(
     if (subGroup == nullptr) {
       return nullptr;
     }
-    currentGroup = subGroup;
+    currentGroup = subGroup.get();
   }
   return currentGroup;
 }
@@ -118,7 +119,7 @@ auto ConfigurationManager::getPropertyValue(
     const std::string& propertyName) -> std::any {
   auto group = getNestedGroups(nestingGroups);
   if (group == nullptr) {
-    return false;
+    return std::nullopt;
   }
   return group->getPropertyValue(propertyName);
 }
@@ -166,7 +167,7 @@ auto ConfigurationManager::removeSubgroup(
   auto groupTobeRemoved = nestingGroups.back();
   nestingGroups.pop_back();
 
-  std::shared_ptr<Group> group = getNestedGroups(nestingGroups);
+  Group* group = getNestedGroups(nestingGroups);
   if (group == nullptr) {
     return false;
   }

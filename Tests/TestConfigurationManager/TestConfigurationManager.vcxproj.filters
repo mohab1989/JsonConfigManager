@@ -5,6 +5,7 @@
     <ClCompile Include="ChoicePropertyTest.cpp" />
     <ClCompile Include="NumericPropertyTest.cpp" />
     <ClCompile Include="GroupTest.cpp" />
+    <ClCompile Include="ConfigurationManagerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

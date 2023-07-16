@@ -19,12 +19,12 @@
 		"choice_properties": [{
 				"name": "propety_name_1",
 				"accepted_numeric_properties": [1, 2, 3],
-				"accepted_string_properties": ["A1,A2,A3"]
+				"accepted_string_properties": ["A1","A2","A3"]
 			},
 			{
 				"name": "propety_name_2",
 				"accepted_numeric_properties": [1.1, 2.5, 3.6],
-				"accepted_string_properties": ["B1,B2,B3"]
+				"accepted_string_properties": ["B1","B2","B3"]
 			}
 		],
 
@@ -33,12 +33,12 @@
 				"choice_properties": [{
 						"name": "propety_name_1",
 						"accepted_numeric_properties": [100, 200, 300],
-						"accepted_string_properties": ["C1,C2,C3"]
+						"accepted_string_properties": ["C1","C2","C3"]
 					},
 					{
 						"name": "propety_name_2",
 						"accepted_numeric_properties": [-10, -200, 300],
-						"accepted_string_properties": ["D1,D2,D3"]
+						"accepted_string_properties": ["D1","D2","D3"]
 					}
 				]
 			},
