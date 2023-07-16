@@ -22,6 +22,8 @@ class Group {
       std::vector<std::shared_ptr<Group>>();
 
  public:
+  bool operator==(const Group& rhs) const;
+  bool operator==(const std::string& rhsName) const;
   Group() = default;
   CONFIGURATION_MANAGER Group(
       const std::string& name,
@@ -44,10 +46,6 @@ class Group {
   CONFIGURATION_MANAGER auto appendSubgroup(std::unique_ptr<Group>&& group)
       ->bool;
   CONFIGURATION_MANAGER auto removeSubgroup(const std::string& name)->bool;
-  
-  bool operator==(const Group& rhs) const {
-    return m_name == rhs.m_name;
-  }
 
   //void from_json(const json& j, Group& p) {
   //  j.at("name").get_to(p.name);

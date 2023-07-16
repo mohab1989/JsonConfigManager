@@ -5,6 +5,13 @@
 
 namespace ConfigurationManager {
 
+bool Group::operator==(const Group& rhs) const {
+  return m_name == rhs.m_name;
+}
+bool Group::operator==(const std::string& rhsName) const {
+  return m_name == rhsName;
+}
+
 auto Group::getPropertyValue(std::string name) -> std::any {
   auto property =
       std::find_if(m_properties.begin(), m_properties.end(),
