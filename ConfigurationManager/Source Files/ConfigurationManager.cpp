@@ -2,7 +2,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <optional>
 
 namespace ConfigurationManager {
 
@@ -119,13 +118,13 @@ auto ConfigurationManager::getPropertyValue(
     const std::string& propertyName) -> std::any {
   auto group = getNestedGroups(nestingGroups);
   if (group == nullptr) {
-    return std::nullopt;
+    return std::any();
   }
   return group->getPropertyValue(propertyName);
 }
 
 auto ConfigurationManager::addSubgroup(
-    std::deque<std::string> nestingGroups, std::string groupName,
+    const std::deque<std::string>& nestingGroups, const std::string& groupName,
     std::vector<std::unique_ptr<IConfigurableProperty>>&& properties,
     std::vector<std::shared_ptr<Group>>&& subgroups) -> bool {
   // root group
@@ -151,7 +150,7 @@ auto ConfigurationManager::addSubgroup(
 }
 
 auto ConfigurationManager::removeSubgroup(
-    std::deque<std::string>& nestingGroups) -> bool {
+    const std::deque<std::string>& nestingGroups) -> bool {
   // root group
   if (nestingGroups.size() == 1) {
     auto rootGroup = nestingGroups.front();
@@ -165,9 +164,10 @@ auto ConfigurationManager::removeSubgroup(
   }
 
   auto groupTobeRemoved = nestingGroups.back();
-  nestingGroups.pop_back();
+  auto nestingSubGroups = nestingGroups;
+  nestingSubGroups.pop_back();
 
-  Group* group = getNestedGroups(nestingGroups);
+  Group* group = getNestedGroups(nestingSubGroups);
   if (group == nullptr) {
     return false;
   }

@@ -41,13 +41,13 @@ class ConfigurationManager {
       -> std::any;
 
   CONFIGURATION_MANAGER auto addSubgroup(
-      std::deque<std::string> nestingGroups, std::string groupName,
+      const std::deque<std::string>& nestingGroups, const std::string& groupName,
       std::vector<std::unique_ptr<IConfigurableProperty>>&& properties =
           std::vector<std::unique_ptr<IConfigurableProperty>>(),
       std::vector<std::shared_ptr<Group>>&& subgroups =
           std::vector<std::shared_ptr<Group>>()) -> bool;
   CONFIGURATION_MANAGER auto removeSubgroup(
-      std::deque<std::string>& nestingGroups) -> bool;
+      const std::deque<std::string>& nestingGroups) -> bool;
 
 };
 }  // namespace ConfigurationManager
