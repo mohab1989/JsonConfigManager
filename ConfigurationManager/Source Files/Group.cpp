@@ -12,7 +12,7 @@ bool Group::operator==(const std::string& rhsName) const {
   return m_name == rhsName;
 }
 
-auto Group::getPropertyValue(std::string name) -> std::any {
+auto Group::getPropertyValue(std::string name) const -> std::any {
   auto property =
       std::find_if(m_properties.begin(), m_properties.end(),
                    [name](const std::unique_ptr<IConfigurableProperty>& p) {
@@ -92,5 +92,22 @@ auto Group::getPropertyValue(std::string name) -> std::any {
    }
    m_subgroups.erase(group);
    return true;
+  }
+
+  auto Group::getPropertiesNames() const -> std::vector<std::string> {
+   auto names = std::vector<std::string>(m_properties.size());
+   std::transform(m_properties.begin(), m_properties.end(), names.begin(),
+                  [](const std::unique_ptr<IConfigurableProperty>& p) {
+                    return p->getName();
+       });
+   return names;
+  }
+  auto Group::getSubgroupsNames() const -> std::vector<std::string> {
+   auto names = std::vector<std::string>(m_subgroups.size());
+   std::transform(m_subgroups.begin(), m_subgroups.end(), names.begin(),
+                  [](const std::shared_ptr<Group>& g) {
+                    return g->getName();
+                  });
+   return names;
   }
  }  // namespace ConfigurationManager

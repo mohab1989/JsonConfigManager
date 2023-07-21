@@ -6,7 +6,6 @@
 #endif
 
 #include <memory>
-#include <unordered_set>  // TODO: turn vectors to unordered_set later !!
 #include <vector>
 
 #include "IConfigurableProperty.hpp"
@@ -36,7 +35,7 @@ class Group {
 
   CONFIGURATION_MANAGER auto getName() const -> std::string { return m_name; };
 
-  CONFIGURATION_MANAGER auto getPropertyValue(std::string name) -> std::any;
+  CONFIGURATION_MANAGER auto getPropertyValue(std::string name) const -> std::any;
   CONFIGURATION_MANAGER auto getSubgroup(std::string name)const -> std::shared_ptr<Group>;
   CONFIGURATION_MANAGER auto setPropertyValue(std::string name, std::any value)
       -> bool;
@@ -46,11 +45,7 @@ class Group {
   CONFIGURATION_MANAGER auto appendSubgroup(std::unique_ptr<Group>&& group)
       ->bool;
   CONFIGURATION_MANAGER auto removeSubgroup(const std::string& name)->bool;
-
-  //void from_json(const json& j, Group& p) {
-  //  j.at("name").get_to(p.name);
-  //  j.at("address").get_to(p.address);
-  //  j.at("age").get_to(p.age);
-  //}
+  CONFIGURATION_MANAGER auto getPropertiesNames() const -> std::vector<std::string>;
+  CONFIGURATION_MANAGER auto getSubgroupsNames() const -> std::vector<std::string>;
 };
 }  // namespace ConfigurationManager

@@ -27,8 +27,10 @@ class JsonUtilites {
 class ConfigurationManager {
  private:
   std::vector<Group> m_groups = std::vector<Group>();
-  auto DeserializeGroupConstraints(const std::string groupName,
+  auto deserializeGroupConstraints(const std::string& groupName,
                                    const json& groupObject) -> Group;
+  auto serializeConfigurationGroup(const Group& group)
+      -> json;
   auto getNestedGroups(std::deque<std::string> nestingGroups) -> Group*;
 
  public:
@@ -49,5 +51,6 @@ class ConfigurationManager {
   CONFIGURATION_MANAGER auto removeSubgroup(
       const std::deque<std::string>& nestingGroups) -> bool;
 
+  CONFIGURATION_MANAGER auto saveCurrentConfig(std::filesystem::path configPath) -> bool;
 };
 }  // namespace ConfigurationManager

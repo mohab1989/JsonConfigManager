@@ -36,8 +36,8 @@ class ConfigurationManagerTest : public ::testing::Test {
 
 TEST_F(ConfigurationManagerTest, setConfigNumericPropertyPass) {
   ASSERT_TRUE(
-      m_config.setPropertyValue({"group_1"}, "propety_name_1", (double)60));
-  auto value = m_config.getPropertyValue({"group_1"}, "propety_name_1");
+      m_config.setPropertyValue({"group_1"}, "nPropety_name_1", (double)60));
+  auto value = m_config.getPropertyValue({"group_1"}, "nPropety_name_1");
   ASSERT_EQ((double)60, std::any_cast<double>(value));
 }
 
@@ -53,26 +53,26 @@ TEST_F(ConfigurationManagerTest, setConfigWrongSubgroupPropertyFail) {
 
 TEST_F(ConfigurationManagerTest, setConfigSubgroupChoicePropertyPass) {
   ASSERT_TRUE(m_config.setPropertyValue({"group_1", "subgroup_1"},
-                                        "propety_name_1", (double)100));
+                                        "cPropety_name_1", (double)100));
   auto value =
-      m_config.getPropertyValue({"group_1", "subgroup_1"}, "propety_name_1");
+      m_config.getPropertyValue({"group_1", "subgroup_1"}, "cPropety_name_1");
   ASSERT_EQ((double)100, std::any_cast<double>(value));
 
   ASSERT_TRUE(m_config.setPropertyValue({"group_1", "subgroup_1"},
-                                        "propety_name_1", std::string("C2")));
+                                        "cPropety_name_1", std::string("C2")));
   value =
-      m_config.getPropertyValue({"group_1", "subgroup_1"}, "propety_name_1");
+      m_config.getPropertyValue({"group_1", "subgroup_1"}, "cPropety_name_1");
   ASSERT_EQ(std::string("C2"), std::any_cast<std::string>(value));
 }
 
 TEST_F(ConfigurationManagerTest, setConfigSubgroupChoicePropertyFail) {
   ASSERT_TRUE(m_config.setPropertyValue({"group_1", "subgroup_1"},
-                                        "propety_name_1", (double)100));
+                                        "cPropety_name_1", (double)100));
 
   ASSERT_FALSE(m_config.setPropertyValue({"group_1", "subgroup_1"},
-                                         "propety_name_1", std::string("C6")));
+                                         "cPropety_name_1", std::string("C6")));
   auto value =
-      m_config.getPropertyValue({"group_1", "subgroup_1"}, "propety_name_1");
+      m_config.getPropertyValue({"group_1", "subgroup_1"}, "cPropety_name_1");
   ASSERT_EQ((double)100, std::any_cast<double>(value));
 }
 
@@ -93,6 +93,10 @@ TEST_F(ConfigurationManagerTest, addAndRemoveSubgroupPass) {
   value = m_config.getPropertyValue({"group_1", "subgroup_1", "subgroup_1"},
                                     "flush");
   ASSERT_FALSE(value.has_value());
+}
+
+TEST_F(ConfigurationManagerTest, serializeJsonConfig) {
+  m_config.saveCurrentConfig("HpmConfig.json");
 }
 
 }  // namespace ConfigurationManager

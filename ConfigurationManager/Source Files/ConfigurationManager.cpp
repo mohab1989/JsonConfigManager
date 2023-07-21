@@ -19,8 +19,8 @@ auto JsonUtilites::loadJson(std::filesystem::path pathToJsonConfig) -> json {
   return json::parse(f);
 }
 
-auto ConfigurationManager::DeserializeGroupConstraints(
-    const std::string groupName, const json& groupObject) -> Group {
+auto ConfigurationManager::deserializeGroupConstraints(
+    const std::string& groupName, const json& groupObject) -> Group {
   // Iterate over poperties constraints
   auto properties = std::vector<std::unique_ptr<IConfigurableProperty>>();
 
@@ -54,11 +54,34 @@ auto ConfigurationManager::DeserializeGroupConstraints(
     auto subGroups = groupObject.at("subgroups");
     for (auto& subGroup : subGroups.items()) {
       subgroups.push_back(std::make_shared<Group>(
-          DeserializeGroupConstraints(subGroup.key(), subGroup.value())));
+          deserializeGroupConstraints(subGroup.key(), subGroup.value())));
     }
   }
 
   return Group(groupName, std::move(properties), std::move(subgroups));
+}
+
+auto ConfigurationManager::serializeConfigurationGroup(const Group& group) -> json {
+  // Srialize Properties
+  auto groupJson = json();
+  for (const auto& propertyName : group.getPropertiesNames()) {
+    auto value = group.getPropertyValue(propertyName);
+    if (value.type() == typeid(double)) {
+      groupJson[propertyName] = std::any_cast<double>(value);
+    } else if (value.type() == typeid(std::string)) {
+      groupJson[propertyName] = std::any_cast<std::string>(value);
+    } else {
+      groupJson[propertyName] = nullptr;
+    }
+  }
+  // Srialize Subgroups
+  for (const auto& subGroupName : group.getSubgroupsNames()) {
+    auto subgroup = group.getSubgroup(subGroupName);
+    groupJson[subGroupName] =
+        serializeConfigurationGroup(*subgroup);
+  }
+
+  return groupJson;
 }
 
 ConfigurationManager::ConfigurationManager(json constraints) {
@@ -76,7 +99,7 @@ ConfigurationManager::ConfigurationManager(json constraints) {
       // for the time being assume: ignore.
       continue;
     }
-    m_groups.push_back(DeserializeGroupConstraints(group.key(), group.value()));
+    m_groups.push_back(deserializeGroupConstraints(group.key(), group.value()));
   }
 }
 
@@ -113,6 +136,7 @@ auto ConfigurationManager::setPropertyValue(
   }
   return group->setPropertyValue(propertyName, value);
 }
+
 auto ConfigurationManager::getPropertyValue(
     const std::deque<std::string>& nestingGroups,
     const std::string& propertyName) -> std::any {
@@ -141,12 +165,12 @@ auto ConfigurationManager::addSubgroup(
     return true;
   }
 
-   auto parentGroup = getNestedGroups(nestingGroups);
-   if (parentGroup == nullptr) {
-     return false;
-   }
-   return parentGroup->appendSubgroup(std::make_unique<Group>(
-       groupName, std::move(properties), std::move(subgroups)));
+  auto parentGroup = getNestedGroups(nestingGroups);
+  if (parentGroup == nullptr) {
+    return false;
+  }
+  return parentGroup->appendSubgroup(std::make_unique<Group>(
+      groupName, std::move(properties), std::move(subgroups)));
 }
 
 auto ConfigurationManager::removeSubgroup(
@@ -172,5 +196,27 @@ auto ConfigurationManager::removeSubgroup(
     return false;
   }
   return group->removeSubgroup(groupTobeRemoved);
+}
+
+auto ConfigurationManager::saveCurrentConfig(std::filesystem::path configPath)
+    -> bool {
+  configPath = std::filesystem::absolute(configPath);
+  auto parentDirectortyPath = configPath.parent_path();
+  if (!std::filesystem::exists(parentDirectortyPath)) {
+    try {
+      std::filesystem::create_directories(parentDirectortyPath);
+      std::cout << "Directory path created successfully!" << std::endl;
+    } catch (const std::exception& e) {
+      std::cout << "Error creating directory path: " << e.what() << std::endl;
+      return false;
+    }
+  }
+
+  auto jsonConfig = json();
+  for (const auto& group : m_groups) {
+    jsonConfig[group.getName()] =
+        serializeConfigurationGroup(group);
+  }
+  JsonUtilites::writeJson(jsonConfig, configPath);
 }
 }  // namespace ConfigurationManager
